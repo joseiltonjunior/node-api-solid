@@ -1,6 +1,6 @@
 # App
 
-GymPass style app.
+Node API Solid (GymPass style app).
 
 ## RFs (Requisitos funcionais)
 
