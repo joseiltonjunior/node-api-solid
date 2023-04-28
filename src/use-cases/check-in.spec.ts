@@ -19,8 +19,8 @@ describe('Check-in Use Case', () => {
     boxesRepository.items.push({
       id: 'box-01',
       description: '',
-      latitude: new Decimal(0),
-      longitude: new Decimal(0),
+      latitude: new Decimal(-8.0359139),
+      longitude: new Decimal(-34.935635),
       phone: '',
       title: 'Hakai Crossfit',
     })
@@ -36,8 +36,8 @@ describe('Check-in Use Case', () => {
     const { checkIn } = await sut.execute({
       boxId: 'box-01',
       userId: 'user-01',
-      userLatitude: 0,
-      userLongitute: 0,
+      userLatitude: -8.0359139,
+      userLongitute: -34.935635,
     })
 
     expect(checkIn.id).toEqual(expect.any(String))
@@ -49,16 +49,16 @@ describe('Check-in Use Case', () => {
     await sut.execute({
       boxId: 'box-01',
       userId: 'user-01',
-      userLatitude: 0,
-      userLongitute: 0,
+      userLatitude: -8.0359139,
+      userLongitute: -34.935635,
     })
 
     await expect(() =>
       sut.execute({
         boxId: 'box-01',
         userId: 'user-01',
-        userLatitude: 0,
-        userLongitute: 0,
+        userLatitude: -8.0359139,
+        userLongitute: -34.935635,
       }),
     ).rejects.toBeInstanceOf(Error)
   })
@@ -69,8 +69,8 @@ describe('Check-in Use Case', () => {
     await sut.execute({
       boxId: 'box-01',
       userId: 'user-01',
-      userLatitude: 0,
-      userLongitute: 0,
+      userLatitude: -8.0359139,
+      userLongitute: -34.935635,
     })
 
     vi.setSystemTime(new Date(2023, 3, 27, 9, 5, 0))
@@ -78,10 +78,30 @@ describe('Check-in Use Case', () => {
     const { checkIn } = await sut.execute({
       boxId: 'box-01',
       userId: 'user-01',
-      userLatitude: 0,
-      userLongitute: 0,
+      userLatitude: -8.0359139,
+      userLongitute: -34.935635,
     })
 
     expect(checkIn.id).toEqual(expect.any(String))
+  })
+
+  it('should not be able to check in on distant box', async () => {
+    boxesRepository.items.push({
+      id: 'box-02',
+      description: '',
+      latitude: new Decimal(-8.0467096),
+      longitude: new Decimal(-34.9311734),
+      phone: '',
+      title: 'Typescript Crossfit',
+    })
+
+    await expect(() =>
+      sut.execute({
+        boxId: 'box-2',
+        userId: 'user-01',
+        userLatitude: -8.0359139,
+        userLongitute: -34.935635,
+      }),
+    ).rejects.toBeInstanceOf(Error)
   })
 })
